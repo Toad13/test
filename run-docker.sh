@@ -3,15 +3,15 @@
 if [ "$1" = "--ansible" ] 
 then
 	docker build -t ansible ./ansible/
-	docker run -d -it --rm --name ansible -v $(pwd)/keys:/root/.ssh ansible
+	docker run -d -it --rm --name ansible -v $(pwd)/keys:/root/.ssh -v $(pwd)/ansible/playbook:/root/playbook -w /root/ ansible
+	docker exec -d -u 0 ansible chown -R root:root /root
 	docker exec -it ansible /bin/bash
 fi
 
 if [ "$1" = "--terraform" ] 
 then
-	docker build -t terraform ./terraform/
-	docker run -d -it --rm --name terraform -v $(pwd)/keys:/root/.ssh terraform
- 	docker exec -it terraform /bin/bash
+	docker run -d --rm -it --name terraform --entrypoint "/usr/bin/tail" -v $(pwd)/terraform:/workspace -w /workspace -v $(pwd)/keys:/root/.ssh hashicorp/terraform:light sh tail -f /dev/null
+ 	docker exec -it terraform sh
 fi
 
 if [ "$1" != "--terraform" ] && [ "$1" != "--ansible" ] 
