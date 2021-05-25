@@ -4,7 +4,6 @@ if [ "$1" = "--ansible" ]
 then
 	docker build -t ansible ./ansible/
 	docker run -d -it --rm --name ansible -v $(pwd)/keys:/root/.ssh -v $(pwd)/ansible/playbook:/root/playbook -w /root/ ansible
-	docker exec -d -u 0 ansible chown -R root:root /root
 	docker exec -it ansible /bin/bash
 fi
 
