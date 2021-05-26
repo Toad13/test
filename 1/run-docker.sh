@@ -7,7 +7,7 @@ if [ "$1" = "--ansible" ]; then
 	docker stop ansible
 elif [ "$1" = "--terraform" ]; then
 	docker build -t terraform ./terraform/
-	docker run -d -it --rm --name terraform -v $(pwd)/keys:/root/.ssh -w /root/ terraform
+	docker run -d -it --rm --name terraform -v $(pwd)/keys:/root/.ssh -v $(pwd)/terraform/confdir:/root/confdir -w /root/ terraform
 	docker exec -it terraform sh
  	docker stop terraform
 elif [ "$1" != "--terraform" ] && [ "$1" != "--ansible" ];then
